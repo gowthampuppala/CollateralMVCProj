@@ -1,0 +1,22 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model CollateralMVC.Models.Risk
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Subscribe", "Risk", FormMethod.Post))
+{
+    <p>
+    @Html.DisplayNameFor(model => model.LandRate)
+    </p>
+    <p>@Html.TextBoxFor(model => model.LandRate)</p>
+    <p>@Html.DisplayNameFor(model => model.goldRate)</p>
+    <p>@Html.TextBoxFor(model => model.goldRate)</p>
+    // @Html.ValidationMessageFor(model => model.Email)
+    <button type="submit">Enter Current market details </button>
+}
