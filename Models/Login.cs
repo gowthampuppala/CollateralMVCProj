@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace CollateralMVC.Models
 {
-    public class SubscribeModel
+    public partial class Login
     {
-         
-        [Required(ErrorMessage = "Please Provide Id ljzcnvefjbnvfsn")]
-        public int Email { get; set; }
-        
+        [Required(ErrorMessage ="Email must be entered")]
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

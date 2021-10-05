@@ -53,7 +53,9 @@ namespace CollateralMVC.Controllers
         {
             using (var client = new HttpClient())
             {
-
+                //HttpClient client = new HttpClient();
+                 client.DefaultRequestHeaders.Authorization =
+                   new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InN0cmluZyIsInJvbGUiOiJzdHJpbmciLCJuYmYiOjE2MzI4ODU5ODIsImV4cCI6MTYzMjg4NjI4MiwiaWF0IjoxNjMyODg1OTgyfQ.VlhJUS5D368UEQHOVt5oSfw3aMJrrLONMLmceTmQFO0");
                 client.BaseAddress = new Uri("http://localhost:56588/api/Data/PostintoLoan");
                 var postJob = client.PostAsJsonAsync<Customer_Loan>("", loan);
                 postJob.Wait();

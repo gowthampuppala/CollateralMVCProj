@@ -1,82 +1,21 @@
-﻿@*@model IEnumerable<CollateralMVC.Models.Loan>
-
-    @{
-        ViewData["Title"] = "Index";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
-
-    <h1>Index</h1>
-
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LoanProducts)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.MaxLoanEligible)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Interest)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Tenure)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TypeOfCollateralAccepted)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-    @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LoanProducts)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MaxLoanEligible)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Interest)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tenure)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TypeOfCollateralAccepted)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-
-                </td>
-            </tr>
-    }
-        </tbody>
-    </table>
-*@
-
-@model CollateralMVC.Models.SubscribeModel
+﻿@model CollateralMVC.Models.SubscribeModel
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
 @using (Html.BeginForm("Subscribe", "Loan", FormMethod.Post))
 {
-    @Html.TextBoxFor(model => model.Email)
-    // @Html.ValidationMessageFor(model => model.Email)
-    <button type="submit">Enter Loan Id </button>
+   <p> <input type="text" asp-for="Email" required/></p>
+   <p><button type="submit">Enter Loan Id </button></p>
 }
 <p>
     <a asp-action="Create">Save Collaterals to a Loan</a>

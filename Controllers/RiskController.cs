@@ -12,14 +12,22 @@ namespace CollateralMVC.Controllers
 {
     public class RiskController : Controller
     {
+        static readonly log4net.ILog _log4net = log4net.LogManager.GetLogger(typeof(CollateralController));
+
+        [Authorize]
         public IActionResult Index()
         {
+            //ViewBag["Hi"] = "Hi";
+           // ViewBag.Message = String.Format("Hello{0}.\\ncurrent Date and time:{1}", "Ra", DateTime.Now.ToString());
             return View();
         }
+        
         [HttpPost]
-        [Authorize]
+        
         public IActionResult Subscribe(Risk model)
         {
+
+           // ModelState.AddModelError(string.Empty, "server error occured. please contact support");
             IEnumerable<Collateral> collaterals = null;
             using (var client = new HttpClient())
             {
@@ -33,35 +41,14 @@ namespace CollateralMVC.Controllers
                     readJob.Wait();
                     collaterals = readJob.Result;
                 }
-                else
+               else
                 {
                     collaterals = Enumerable.Empty<Collateral>();
                     ModelState.AddModelError(string.Empty, "server error occured. please contact support");
                 }
                 return View(collaterals);
             }
-            //return Ok();
-
-
-            /*using (var client = new HttpClient())
-            {
-                var Collaterals= new Collateral();
-                client.BaseAddress = new Uri("http://localhost:2960/api/RiskData/");
-                HttpResponseMessage GetJob = await client.GetAsync($"{model.goldRate}/{model.LandRate}");
-
-
-                if (GetJob.IsSuccessStatusCode)
-                {
-                    var result = GetJob.Content.ReadAsStringAsync().Result;
-                    Collaterals = JsonConvert.DeserializeObject<Collateral>(result);
-                    //return RedirectToAction("Index");
-                }
-                *//* if (CustomerLoan.Id == 0)
-                 {
-                     return ModelState.Count
-                 }*//*
-                return View(Collaterals);
-            }*/
+                
+            }
         }
     }
-}

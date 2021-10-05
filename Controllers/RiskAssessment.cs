@@ -1,5 +1,5 @@
 ﻿using CollateralMVC.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,38 +9,48 @@ using System.Threading.Tasks;
 
 namespace CollateralMVC.Controllers
 {
-    public class CollateralController : Controller
+    public class RiskAssessment : Controller
     {
         static readonly log4net.ILog _log4net = log4net.LogManager.GetLogger(typeof(CollateralController));
- 
-        [Authorize]
-        public IActionResult Index()
-        {
 
-            _log4net.Info("Displaying Index Method of Collateral Controller");
+        // GET: RiskAssessment
+        public ActionResult Index()
+        {
             IEnumerable<Collateral> collaterals = null;
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("http://localhost:25168/api/");
-                var responseTask = client.GetAsync("Collateral");
+                _log4net.Info("Risk assessment started");
+                client.BaseAddress = new Uri("http://localhost:2960/api/RiskData/");
+                var responseTask = client.GetAsync("");
                 responseTask.Wait();
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    _log4net.Info("Get All Collaterals from web api");
+                    _log4net.Info("Risk assessment finished");
                     var readJob = result.Content.ReadAsAsync<IList<Collateral>>();
                     readJob.Wait();
                     collaterals = readJob.Result;
+                    return View(collaterals);
                 }
                 else
                 {
-                    _log4net.Info("If Collateral for Loan Id is already added error is generated");
+                    _log4net.Info("No Risks Found");
                     collaterals = Enumerable.Empty<Collateral>();
                     ModelState.AddModelError(string.Empty, "server error occured. please contact support");
                 }
             }
-            _log4net.Info("return collateral list to View");
-            return View(collaterals);
+            return View();
+        }
+
+        // GET: RiskAssessment/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
+        }
+        // GET: RiskAssessment/Create
+        public ActionResult Create()
+        {
+            return View();
         }
     }
 }

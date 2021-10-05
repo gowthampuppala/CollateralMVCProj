@@ -1,0 +1,42 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model CollateralMVC.Models.Login
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+
+}
+@ViewBag.Message1
+@using (Html.BeginForm("Logger", "Login", FormMethod.Post))
+{
+
+    <p>
+        @Html.DisplayNameFor(model => model.Email)
+    </p>
+
+    //  <p>@Html.TextBoxFor(model => model.Email)</p>
+    <p><input type="text" asp-for="Email" required/></p>
+    <p>@Html.DisplayNameFor(model => model.Password)</p>
+    <p><input type="password" asp-for="Password" required /></p>
+    // <p>@Html.TextBoxFor(model => model.Password)</p>
+    // @Html.ValidationMessageFor(model => model.Email)
+    <button type="submit">Login </button>
+}

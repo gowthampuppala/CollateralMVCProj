@@ -9,10 +9,21 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+
+}
+@ViewBag.Message1
 @using (Html.BeginForm("Subscribe", "Risk", FormMethod.Post))
 {
     <p>
-    @Html.DisplayNameFor(model => model.LandRate)
+        @Html.DisplayNameFor(model => model.LandRate)
     </p>
     <p>@Html.TextBoxFor(model => model.LandRate)</p>
     <p>@Html.DisplayNameFor(model => model.goldRate)</p>

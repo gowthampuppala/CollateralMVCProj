@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,6 +9,8 @@ namespace CollateralMVC.Models
     public class Collateral
     {
 		public int Id { get; set; }
+
+		[Required(ErrorMessage ="Please enter Loan Id")]
 		public int LoanId { get; set; }
 		public int CustomerId { get; set; }
 		public string Type { get; set; }

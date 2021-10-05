@@ -1,10 +1,9 @@
 ﻿using CollateralMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -13,71 +12,57 @@ namespace CollateralMVC.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
+       
         public IActionResult Index()
         {
-
             return View();
         }
-
-        public IActionResult Privacy()
+        [HttpPost]
+       // [Authorize]
+        public IActionResult Subscribe(Risk model)
         {
-            return View();
-        }
-       /* public async Task<IActionResult> Details(int id)
-        {
+            IEnumerable<Collateral> collaterals = null;
             using (var client = new HttpClient())
             {
-                var CustomerLoan = new Customer_Loan();
-                client.BaseAddress = new Uri("http://localhost:56588/api/Data/");
-                HttpResponseMessage GetJob = await client.GetAsync($"{id}");
-                
-                
+                client.BaseAddress = new Uri("http://localhost:2960/api/RiskData/");
+                var responseTask = client.GetAsync($"{model.goldRate}/{model.LandRate}");
+                responseTask.Wait();
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readJob = result.Content.ReadAsAsync<IList<Collateral>>();
+                    readJob.Wait();
+                    collaterals = readJob.Result;
+                }
+                else
+                {
+                    collaterals = Enumerable.Empty<Collateral>();
+                    ModelState.AddModelError(string.Empty, "server error occured. please contact support");
+                }
+                return View(collaterals);
+            }
+            //return Ok();
+
+
+            /*using (var client = new HttpClient())
+            {
+                var Collaterals= new Collateral();
+                client.BaseAddress = new Uri("http://localhost:2960/api/RiskData/");
+                HttpResponseMessage GetJob = await client.GetAsync($"{model.goldRate}/{model.LandRate}");
+
+
                 if (GetJob.IsSuccessStatusCode)
                 {
                     var result = GetJob.Content.ReadAsStringAsync().Result;
-                    CustomerLoan = JsonConvert.DeserializeObject<Customer_Loan>(result);
+                    Collaterals = JsonConvert.DeserializeObject<Collateral>(result);
                     //return RedirectToAction("Index");
                 }
-                return View(CustomerLoan);
-            }
-            
-
-        }*/  
-        /*[HttpPost]
-        public async Task<IActionResult> Subscribe(SubscribeModel model)
-        {
-           
-            
-                using (var client = new HttpClient())
-                {
-                    var CustomerLoan = new Customer_Loan();
-                    client.BaseAddress = new Uri("http://localhost:56588/api/Data/");
-                    HttpResponseMessage GetJob = await client.GetAsync($"{model.Email}");
-
-
-                    if (GetJob.IsSuccessStatusCode)
-                    {
-                        var result = GetJob.Content.ReadAsStringAsync().Result;
-                        CustomerLoan = JsonConvert.DeserializeObject<Customer_Loan>(result);
-                        //return RedirectToAction("Index");
-                    }
-                    return View(CustomerLoan);
-                
-                
-            } 
-        }*/
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                *//* if (CustomerLoan.Id == 0)
+                 {
+                     return ModelState.Count
+                 }*//*
+                return View(Collaterals);
+            }*/
         }
     }
 }
